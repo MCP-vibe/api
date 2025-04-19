@@ -1,0 +1,8 @@
+basePath: /
+info:
+  contact: {}
+  description: API сервер для MCP
+  title: MCP API
+  version: "1.0"
+paths: {}
+swagger: "2.0"
