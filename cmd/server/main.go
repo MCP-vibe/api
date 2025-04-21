@@ -19,14 +19,14 @@ func main() {
 	app := infrastructure.NewConfig(config).
 		ContextTimeout(10 * time.Second).
 		Logger().
-		Validator()
+		Validator().
+		Database()
 
-	_ = app
+	app.WebServer().Start()
 }
 
 /*
 TODO :
-1. Add a database connection (PostgreSQL)
 2. Add repo, entities
 3. Add migrations (user, organization)
 4. Add usecases/actions/routes

@@ -15,6 +15,7 @@ import (
 	"api/internal/adapters/logger"
 	"api/internal/adapters/validator"
 	"api/internal/config"
+	db "api/internal/infrastructure/database"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rs/cors"
@@ -28,6 +29,7 @@ type GinEngine struct {
 	router     *gin.Engine
 	log        logger.Logger
 	validator  validator.Validator
+	db         db.DBManager
 	ctxTimeout time.Duration
 }
 
@@ -35,6 +37,7 @@ func NewGinServer(
 	cfg config.Config,
 	log logger.Logger,
 	validator validator.Validator,
+	db db.DBManager,
 	ctxTimeout time.Duration,
 ) *GinEngine {
 	return &GinEngine{
@@ -42,6 +45,7 @@ func NewGinServer(
 		router:     gin.New(),
 		log:        log,
 		validator:  validator,
+		db:         db,
 		ctxTimeout: ctxTimeout,
 	}
 }

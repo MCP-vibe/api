@@ -4,6 +4,7 @@ import (
 	"api/internal/adapters/logger"
 	"api/internal/adapters/validator"
 	"api/internal/config"
+	db "api/internal/infrastructure/database"
 	"api/internal/infrastructure/log"
 	"api/internal/infrastructure/router"
 	"api/internal/infrastructure/validation"
@@ -11,10 +12,10 @@ import (
 )
 
 type app struct {
-	cfg       config.Config
-	logger    logger.Logger
-	validator validator.Validator
-	// dbGSQL     repo.GSQL
+	cfg        config.Config
+	logger     logger.Logger
+	validator  validator.Validator
+	dbManager  db.DBManager
 	ctxTimeout time.Duration
 	webServer  *router.GinEngine
 }
@@ -37,16 +38,15 @@ func (a *app) Logger() *app {
 	return a
 }
 
-// func (a *app) DBGSql(instance int) *app {
-// 	db, err := database.NewDatabaseSQLFactory(instance, a.cfg.DatabaseHost, a.cfg.DatabasePassword, a.cfg.DatabaseUser, a.cfg.DatabasePort, a.cfg.DatabaseDB)
-// 	if err != nil {
-// 		a.logger.Fatalln(err, "Could not make a connection database")
-// 	}
-
-// 	a.logger.Infof("Success connected to database")
-// 	a.dbGSQL = db
-// 	return a
-// }
+func (a *app) Database() *app {
+	gormDB, err := db.NewPostgresConnection(a.cfg)
+	if err != nil {
+		a.logger.Fatalln("Failed to configure database:", err)
+	}
+	a.dbManager = *db.NewDBManager(gormDB)
+	a.logger.Infof("Success database configured")
+	return a
+}
 
 func (a *app) Validator() *app {
 	v, err := validation.NewGoPlayground()
@@ -66,6 +66,7 @@ func (a *app) WebServer() *app {
 		a.cfg,
 		a.logger,
 		a.validator,
+		a.dbManager,
 		a.ctxTimeout,
 	)
 
