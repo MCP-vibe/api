@@ -1,8 +1,55 @@
 basePath: /
+definitions:
+  router.ErrorResponse:
+    properties:
+      error:
+        example: error message
+        type: string
+    type: object
+  usecase.CreateUserInput:
+    properties:
+      first_name:
+        type: string
+      last_name:
+        type: string
+      telegram_id:
+        type: integer
+      username:
+        type: string
+    required:
+    - first_name
+    - last_name
+    - telegram_id
+    - username
+    type: object
 info:
   contact: {}
   description: API сервер для MCP
   title: MCP API
   version: "1.0"
-paths: {}
+paths:
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: Создать пользователя
+      parameters:
+      - description: Create user input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/usecase.CreateUserInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/router.ErrorResponse'
+      summary: Create a new user
+      tags:
+      - user
 swagger: "2.0"

@@ -100,8 +100,9 @@ func (g GinEngine) Listen() {
 }
 
 func (g GinEngine) setupRoutes(router *gin.Engine) {
+	router.POST("/users", g.buildCreateUser())
 
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(files.Handler, ginSwagger.URL("/docs/swagger.yaml")))
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(files.Handler))
 }
 
 func buildParams(c *gin.Context, params ...string) {

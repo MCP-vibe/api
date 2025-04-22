@@ -5,8 +5,11 @@ services:
     image: postgres:15
     container_name: localmcp_postgres
     restart: always
-    env_file:
-      - .env
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+      - PGDATA=/var/lib/postgresql/data
     ports:
       - "5432:5432"
     volumes:

@@ -1,1 +1,2 @@
-# api
+- goose -dir ./internal/infrastructure/database/migrations/ create tablename sql - создать миграционный файл
+- swag init -g cmd/server/main.go - генерация документации swagger
